@@ -49,7 +49,7 @@ int main() {
         zodiac = "Unidentified";
     // Output
     cout << "Hello " << fullName << "! Your zodiac sign is: " << zodiac << endl;
-
+ 
     return 0;
 }
 // Created by Jessie Cruz on 2/2/26.
