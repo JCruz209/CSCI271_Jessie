@@ -1,0 +1,127 @@
+#include <iostream>
+#include <limits>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+int main() {
+    // Fixed arrays
+    double score[3][3]; // 3 students x 3 courses
+    string courseName[3] = {"Math", "C Programming", "Operating Systems"};
+
+    bool hasData = false;
+    int choice;
+
+    do {
+        cout << "\n=== Student Grade System ===\n"
+             << "1) Record grades (3x3)\n"
+             << "2) One student's Total & Average\n"
+             << "3) Display ALL (table + per-student stats)\n"
+             << "4) Exit\n"
+             << "Enter choice: ";
+
+        if (!(cin >> choice)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Try again.\n";
+            continue;
+        }
+
+        if (choice == 1) {
+            // Input all 9 grades with validation (0-100)
+            for (int i = 0; i < 3; i++) {
+                cout << "\n-- Enter grades for Student " << i << " --\n";
+                for (int j = 0; j < 3; j++) {
+                    while (true) {
+                        cout << courseName[j] << " (0-100): ";
+
+                        double val;
+                        if (!(cin >> val)) {
+                            cin.clear();
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            cout << "Invalid input. Re-enter.\n";
+                            continue;
+                        }
+
+                        if (val < 0 || val > 100) {
+                            cout << "Invalid. Re-enter.\n";
+                            continue;
+                        }
+
+                        score[i][j] = val;
+                        break;
+                    }
+                }
+            }
+
+            hasData = true;
+            cout << "OK: data recorded.\n";
+        }
+        else if (choice == 2) {
+            if (!hasData) {
+                cout << "Please record grades first (option 1).\n";
+                continue;
+            }
+
+            cout << "Student index (0-2): ";
+            int idx;
+            if (!(cin >> idx)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input. Returning to menu.\n";
+                continue;
+            }
+            if (idx < 0 || idx > 2) {
+                cout << "Out of range. Returning to menu.\n";
+                continue;
+            }
+
+            double total = 0;
+            for (int j = 0; j < 3; j++) total += score[idx][j];
+            double avg = total / 3.0;
+
+            // Print grades + total/avg 
+            cout << "Student " << idx << " -> ";
+            cout << "Math=" << score[idx][0] << " ";
+            cout << "C=" << score[idx][1] << " ";
+            cout << "OS=" << score[idx][2] << " ";
+            cout << "| Total=" << total << " Avg=" << avg << "\n";
+        }
+        else if (choice == 3) {
+            if (!hasData) {
+                cout << "Please record grades first (option 1).\n";
+                continue;
+            }
+
+            cout << "\nTable: rows=students, cols=[Math C OS]\n";
+            for (int i = 0; i < 3; i++) {
+                cout << "S" << i << ": ";
+                for (int j = 0; j < 3; j++) {
+                    cout << setw(4) << score[i][j] << " ";
+                }
+                cout << "\n";
+            }
+
+            cout << "\nPer-student totals & averages:\n";
+            for (int i = 0; i < 3; i++) {
+                double total = 0;
+                for (int j = 0; j < 3; j++) 
+                    total += score[i][j];
+                double avg = total / 3.0;
+
+                cout << "Student " << i << " -> Total=" << total
+                     << " Avg=" << avg << "\n";
+            }
+        }
+        else if (choice == 4) {
+            cout << "Bye!\n";
+        }
+        else {
+            cout << "Invalid choice. Enter 1, 2, 3, or 4.\n";
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
+// Created by Jessie Cruz on 2/23/26.
