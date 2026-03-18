@@ -1,0 +1,98 @@
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+struct Student {
+    string id;
+    string name;
+    string major;
+    string hobby;
+    double gpa;
+    string email;
+    string city;
+};
+
+int main() {
+
+    Student students[3] = {
+        {"S01", "Tom", "MATH", "Football", 2.8, "tom@google.com", "Modesto"},
+        {"S02", "Alice", "CS", "Reading", 3.5, "alice@google.com", "Modesto"},
+        {"S03", "Scott", "CS", "Basketball", 3.2, "scott@google.com", "SanJose"}
+    };
+
+    // [1] Write to file
+    ofstream outFile("students.txt");
+    for (int i = 0; i < 3; i++) {
+        outFile << students[i].id << " "
+                << students[i].name << " "
+                << students[i].major << " "
+                << students[i].hobby << " "
+                << students[i].gpa << " "
+                << students[i].email << " "
+                << students[i].city << endl;
+    }
+    outFile.close();
+    cout << "[1] Data saved to students.txt\n";
+
+    // [2] Read from file
+    Student readStudents[10];
+    ifstream inFile("students.txt");
+
+    int count = 0;
+    while (inFile >> readStudents[count].id
+                  >> readStudents[count].name
+                  >> readStudents[count].major
+                  >> readStudents[count].hobby
+                  >> readStudents[count].gpa
+                  >> readStudents[count].email
+                  >> readStudents[count].city) {
+        count++;
+    }
+    inFile.close();
+
+    cout << "[2] Loaded " << count << " students from students.txt\n\n";
+
+    // [3] Display of all students
+    cout << "[3] Displaying all students:\n";
+    cout << "--------------------------------------------------\n";
+
+    for (int i = 0; i < count; i++) {
+        cout << readStudents[i].id << " "
+             << readStudents[i].name << " ("
+             << readStudents[i].major << ") - "
+             << readStudents[i].city << " - GPA: "
+             << readStudents[i].gpa << endl;
+    }
+
+    // [4] GPA count
+    int highGPA = 0;
+    for (int i = 0; i < count; i++) {
+        if (readStudents[i].gpa >= 3.0)
+            highGPA++;
+    }
+
+    cout << "\n[4] Students with GPA >= 3.0: " << highGPA << "\n\n";
+
+    // [5] Query by city
+    string targetCity = "Modesto";
+    cout << "[5] Students from " << targetCity << ":\n";
+
+    bool found = false;
+    for (int i = 0; i < count; i++) {
+        if (readStudents[i].city == targetCity) {
+            cout << readStudents[i].name << " ("
+                 << readStudents[i].major << ", GPA "
+                 << readStudents[i].gpa << ")\n";
+            found = true;
+        }
+    }
+
+    if (!found) {
+        cout << "No students found in that city.\n";
+    }
+
+    cout << "\nProgram finished.\n";
+
+    return 0;
+}
+// Created by Jessie Cruz on 3/17/26.
